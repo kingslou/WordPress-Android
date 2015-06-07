@@ -21,14 +21,14 @@ repositories {
 android {
     publishNonDefault true
 
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         versionCode 1
         versionName "1.0"
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
     }
     buildTypes {
         release {
