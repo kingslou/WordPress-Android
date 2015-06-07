@@ -16,8 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-
 import org.wordpress.android.R;
 import org.wordpress.android.WordPress;
 import org.wordpress.android.models.Blog;
@@ -51,7 +49,7 @@ public class PostsListFragment extends ListFragment implements EmptyViewAnimatio
     private OnPostSelectedListener mOnPostSelectedListener;
     private OnSinglePostLoadedListener mOnSinglePostLoadedListener;
     private PostsListAdapter mPostsListAdapter;
-    private FloatingActionButton mFabButton;
+    private View mFabButton;
     private ApiHelper.FetchPostsTask mCurrentFetchPostsTask;
     private ApiHelper.FetchSinglePostTask mCurrentFetchSinglePostTask;
     private View mProgressFooterView;
@@ -243,7 +241,7 @@ public class PostsListFragment extends ListFragment implements EmptyViewAnimatio
 
         initSwipeToRefreshHelper();
 
-        mFabButton = (FloatingActionButton) getView().findViewById(R.id.fab_button);
+        mFabButton = getView().findViewById(R.id.fab_button);
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -591,18 +589,6 @@ public class PostsListFragment extends ListFragment implements EmptyViewAnimatio
         }
     }
 
-    public interface OnPostSelectedListener {
-        public void onPostSelected(Post post);
-    }
-
-    public interface OnPostActionListener {
-        public void onPostAction(int action, Post post);
-    }
-
-    public interface OnSinglePostLoadedListener {
-        public void onSinglePostLoaded();
-    }
-
     @Override
     public void onSequenceStarted(EmptyViewMessageType emptyViewMessageType) {
         mEmptyViewMessage = emptyViewMessageType;
@@ -636,5 +622,17 @@ public class PostsListFragment extends ListFragment implements EmptyViewAnimatio
     public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
+    }
+
+    public interface OnPostSelectedListener {
+        public void onPostSelected(Post post);
+    }
+
+    public interface OnPostActionListener {
+        public void onPostAction(int action, Post post);
+    }
+
+    public interface OnSinglePostLoadedListener {
+        public void onSinglePostLoaded();
     }
 }

@@ -63,16 +63,16 @@
                 tools:listitem="@layout/post_list_row" />
         </org.wordpress.android.util.widgets.CustomSwipeRefreshLayout>
 
-        <com.getbase.floatingactionbutton.FloatingActionButton
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_marginBottom="@dimen/fab_margin"
             android:layout_marginRight="@dimen/fab_margin"
-            fab:fab_colorNormal="@color/fab_normal"
-            fab:fab_colorPressed="@color/fab_pressed"
-            fab:fab_icon="@drawable/ic_create_white_24dp" />
+            android:elevation="@dimen/fab_elevation"
+            android:src="@drawable/ic_create_white_24dp"
+            app:borderWidth="0dp" />
 
     </FrameLayout>
 
