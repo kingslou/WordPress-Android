@@ -269,6 +269,7 @@ public class CommentsActivity extends ActionBarActivity
                     .setAction(R.string.undo, undoListener)
                     .show();
 
+            // do the actual moderation once the undo bar has been hidden
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
