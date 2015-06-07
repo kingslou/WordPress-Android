@@ -55,19 +55,14 @@ public class WPMainActivity extends Activity
         SlidingTabLayout.SingleTabClickListener,
         MediaAddFragment.MediaAddFragmentCallback,
         Bucket.Listener<Note> {
+    public static final String ARG_OPENED_FROM_PUSH = "opened_from_push";
     private WPMainViewPager mViewPager;
     private SlidingTabLayout mTabs;
     private WPMainTabAdapter mTabAdapter;
-
-    public static final String ARG_OPENED_FROM_PUSH = "opened_from_push";
-
     /*
-     * tab fragments implement this if their contents can be scrolled, called when user
-     * requests to scroll to the top
+     * badges the notifications tab depending on whether there are unread notes
      */
-    public interface OnScrollToTopListener {
-        void onScrollToTop();
-    }
+    private boolean mIsCheckingNoteBadge;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -264,7 +259,7 @@ public class WPMainActivity extends Activity
                         (NotificationsListFragment.NOTE_MODERATE_ID_EXTRA)));
                 CommentStatus status = CommentStatus.fromString(data.getStringExtra(
                         NotificationsListFragment.NOTE_MODERATE_STATUS_EXTRA));
-                NotificationsUtils.moderateCommentForNote(note, status, this);
+                NotificationsUtils.moderateCommentForNote(note, status, findViewById(R.id.root_view));
             }
         } catch (BucketObjectMissingException e) {
             AppLog.e(T.NOTIFS, e);
@@ -371,10 +366,6 @@ public class WPMainActivity extends Activity
         return null;
     }
 
-    /*
-     * badges the notifications tab depending on whether there are unread notes
-     */
-    private boolean mIsCheckingNoteBadge;
     private void checkNoteBadge() {
         if (mIsCheckingNoteBadge) {
             AppLog.v(AppLog.T.MAIN, "main activity > already checking note badge");
@@ -413,12 +404,12 @@ public class WPMainActivity extends Activity
         return mViewPager.getCurrentItem() == WPMainTabAdapter.TAB_NOTIFS;
     }
 
-    // Events
-
     @SuppressWarnings("unused")
     public void onEventMainThread(UserSignedOutWordPressCom event) {
         resetFragments();
     }
+
+    // Events
 
     @SuppressWarnings("unused")
     public void onEventMainThread(UserSignedOutCompletely event) {
@@ -482,5 +473,13 @@ public class WPMainActivity extends Activity
 
     @Override
     public void onMediaAdded(String mediaId) {
+    }
+
+    /*
+     * tab fragments implement this if their contents can be scrolled, called when user
+     * requests to scroll to the top
+     */
+    public interface OnScrollToTopListener {
+        void onScrollToTop();
     }
 }
