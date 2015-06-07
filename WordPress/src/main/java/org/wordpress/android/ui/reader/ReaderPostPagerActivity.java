@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.Snackbar;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -17,8 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-
-import com.cocosw.undobar.UndoBarController;
 
 import org.wordpress.android.R;
 import org.wordpress.android.analytics.AnalyticsTracker;
@@ -54,19 +53,16 @@ public class ReaderPostPagerActivity extends ActionBarActivity
         implements ReaderInterfaces.OnPostPopupListener,
                    ReaderInterfaces.AutoHideToolbarListener {
 
+    private static final String ARG_IS_SINGLE_POST = "is_single_post";
     private Toolbar mToolbar;
     private WPMainViewPager mViewPager;
     private ProgressBar mProgress;
-
     private ReaderTag mCurrentTag;
     private long mBlogId;
     private long mPostId;
     private ReaderPostListType mPostListType;
-
     private boolean mIsRequestingMorePosts;
     private boolean mIsSinglePostView;
-
-    private static final String ARG_IS_SINGLE_POST = "is_single_post";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -346,7 +342,6 @@ public class ReaderPostPagerActivity extends ActionBarActivity
             @Override
             public void onActionResult(boolean succeeded) {
                 if (!succeeded && !isFinishing()) {
-                    hideUndoBar();
                     ToastUtils.showToast(
                             ReaderPostPagerActivity.this,
                             R.string.reader_toast_err_block_blog,
@@ -379,17 +374,15 @@ public class ReaderPostPagerActivity extends ActionBarActivity
 
         // show the undo bar - on undo we restore the deleted posts, and reselect the
         // one the blog was blocked from
-        UndoBarController.UndoListener undoListener = new UndoBarController.UndoListener() {
+        View.OnClickListener undoListener = new View.OnClickListener() {
             @Override
-            public void onUndo(Parcelable parcelable) {
+            public void onClick(View v) {
                 ReaderBlogActions.undoBlockBlogFromReader(blockResult);
                 loadPosts(blogId, postId);
             }
         };
-        new UndoBarController.UndoBar(ReaderPostPagerActivity.this)
-                .message(getString(R.string.reader_toast_blog_blocked))
-                .listener(undoListener)
-                .translucent(true)
+        Snackbar.make(findViewById(R.id.root_view), getString(R.string.reader_toast_blog_blocked), Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, undoListener)
                 .show();
 
         // reload the adapter and move to the best post not in the blocked blog
@@ -398,12 +391,6 @@ public class ReaderPostPagerActivity extends ActionBarActivity
         long newBlogId = (newId != null ? newId.getBlogId() : 0);
         long newPostId = (newId != null ? newId.getPostId() : 0);
         loadPosts(newBlogId, newPostId);
-    }
-
-    private void hideUndoBar() {
-        if (!isFinishing()) {
-            UndoBarController.clear(this);
-        }
     }
 
     /*
@@ -476,15 +463,14 @@ public class ReaderPostPagerActivity extends ActionBarActivity
      * pager adapter containing post detail fragments
      **/
     private class PostPagerAdapter extends FragmentStatePagerAdapter {
-        private ReaderBlogIdPostIdList mIdList = new ReaderBlogIdPostIdList();
-        private boolean mAllPostsLoaded;
-
         // this is used to retain created fragments so we can access them in
         // getFragmentAtPosition() - necessary because the pager provides no
         // built-in way to do this - note that destroyItem() removes fragments
         // from this map when they're removed from the adapter, so this doesn't
         // retain *every* fragment
         private final SparseArray<Fragment> mFragmentMap = new SparseArray<>();
+        private ReaderBlogIdPostIdList mIdList = new ReaderBlogIdPostIdList();
+        private boolean mAllPostsLoaded;
 
         PostPagerAdapter(FragmentManager fm, ReaderBlogIdPostIdList ids) {
             super(fm);

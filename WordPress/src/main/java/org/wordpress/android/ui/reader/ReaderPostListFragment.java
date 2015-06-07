@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -106,7 +105,6 @@ public class ReaderPostListFragment extends Fragment
     private View mNewPostsBar;
     private View mEmptyView;
     private ProgressBar mProgress;
-    private Snackbar mUndoBar;
     private ViewGroup mTagInfoView;
     private ReaderBlogInfoView mBlogInfoView;
     private ReaderFollowButton mFollowButton;
@@ -697,7 +695,6 @@ public class ReaderPostListFragment extends Fragment
             @Override
             public void onActionResult(boolean succeeded) {
                 if (!succeeded && isAdded()) {
-                    hideUndoBar();
                     ToastUtils.showToast(getActivity(), R.string.reader_toast_err_block_blog, ToastUtils.Duration.LONG);
                 }
             }
@@ -720,15 +717,9 @@ public class ReaderPostListFragment extends Fragment
                 refreshPosts();
             }
         };
-        mUndoBar = Snackbar.make(getView(), getString(R.string.reader_toast_blog_blocked), Snackbar.LENGTH_LONG);
-        mUndoBar.setAction(R.string.undo, undoListener);
-        mUndoBar.show();
-    }
-
-    private void hideUndoBar() {
-        if (isAdded() && mUndoBar != null) {
-            mUndoBar.dismiss();
-        }
+        Snackbar.make(getView(), getString(R.string.reader_toast_blog_blocked), Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, undoListener)
+                .show();
     }
 
     /*
@@ -908,7 +899,6 @@ public class ReaderPostListFragment extends Fragment
 
         getPostAdapter().setCurrentTag(tag);
         hideNewPostsBar();
-        hideUndoBar();
         showLoadingProgress(false);
 
         if (getPostListType() == ReaderPostListType.TAG_PREVIEW) {
