@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.content.Context;
-import android.os.Handler;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.design.widget.TabLayout;
@@ -24,7 +23,6 @@ import org.wordpress.android.ui.notifications.utils.SimperiumUtils;
  * tab layout for main activity
  */
 public class WPMainTabLayout extends TabLayout {
-    private boolean mIsCheckingNoteBadge;
 
     public WPMainTabLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -70,29 +68,11 @@ public class WPMainTabLayout extends TabLayout {
     }
 
     void checkNoteBadge() {
-        if (mIsCheckingNoteBadge) {
-            return;
+        boolean isBadged = isBadged(WPMainTabAdapter.TAB_NOTIFS);
+        boolean hasUnreadNotes = SimperiumUtils.hasUnreadNotes();
+        if (isBadged != hasUnreadNotes) {
+            setBadge(WPMainTabAdapter.TAB_NOTIFS, hasUnreadNotes);
         }
-
-        mIsCheckingNoteBadge = true;
-        new Thread() {
-            @Override
-            public void run() {
-                final boolean hasUnreadNotes = SimperiumUtils.hasUnreadNotes();
-                boolean isBadged = isBadged(WPMainTabAdapter.TAB_NOTIFS);
-                if (isBadged == hasUnreadNotes) {
-                    mIsCheckingNoteBadge = false;
-                    return;
-                }
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setBadge(WPMainTabAdapter.TAB_NOTIFS, hasUnreadNotes);
-                        mIsCheckingNoteBadge = false;
-                    }
-                });
-            }
-        }.start();
     }
 
     /*
