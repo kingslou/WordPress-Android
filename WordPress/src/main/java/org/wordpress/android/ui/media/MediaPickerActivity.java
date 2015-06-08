@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -26,7 +27,6 @@ import org.wordpress.android.R;
 import org.wordpress.android.WordPress;
 import org.wordpress.android.ui.RequestCodes;
 import org.wordpress.android.util.MediaUtils;
-import org.wordpress.android.widgets.SlidingTabLayout;
 import org.wordpress.android.widgets.WPViewPager;
 import org.wordpress.mediapicker.MediaItem;
 import org.wordpress.mediapicker.MediaPickerFragment;
@@ -90,7 +90,7 @@ public class MediaPickerActivity extends ActionBarActivity
 
     private MediaPickerAdapter     mMediaPickerAdapter;
     private ArrayList<MediaSource>[] mMediaSources;
-    private SlidingTabLayout       mTabLayout;
+    private TabLayout mTabLayout;
     private WPViewPager            mViewPager;
     private ActionMode             mActionMode;
     private String                 mCapturePath;
@@ -358,7 +358,7 @@ public class MediaPickerActivity extends ActionBarActivity
         }
 
         mMediaPickerAdapter = new MediaPickerAdapter(getFragmentManager());
-        mTabLayout = (SlidingTabLayout) findViewById(R.id.media_picker_tabs);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mViewPager = (WPViewPager) findViewById(R.id.media_picker_pager);
 
         if (mViewPager != null) {
@@ -392,9 +392,10 @@ public class MediaPickerActivity extends ActionBarActivity
             mViewPager.setAdapter(mMediaPickerAdapter);
 
             if (mTabLayout != null) {
-                mTabLayout.setCustomTabView(R.layout.tab_text, R.id.text_tab);
-                mTabLayout.setDistributeEvenly(true);
-                mTabLayout.setViewPager(mViewPager);
+                int normalColor = getResources().getColor(R.color.blue_light);
+                int selectedColor = getResources().getColor(R.color.white);
+                mTabLayout.setTabTextColors(normalColor, selectedColor);
+                mTabLayout.setupWithViewPager(mViewPager);
             }
         }
     }
@@ -477,22 +478,6 @@ public class MediaPickerActivity extends ActionBarActivity
      * Shows {@link org.wordpress.mediapicker.MediaPickerFragment}'s in a tabbed layout.
      */
     public class MediaPickerAdapter extends FragmentPagerAdapter {
-        private class MediaPicker {
-            public String loadingText;
-            public String errorText;
-            public String emptyText;
-            public String pickerTitle;
-            public ArrayList<MediaSource> mediaSources;
-
-            public MediaPicker(String name, String loading, String error, String empty, ArrayList<MediaSource> sources) {
-                loadingText = loading;
-                errorText = error;
-                emptyText = empty;
-                pickerTitle = name;
-                mediaSources = sources;
-            }
-        }
-
         private final List<MediaPicker> mMediaPickers;
 
         private MediaPickerAdapter(FragmentManager fragmentManager) {
@@ -530,6 +515,22 @@ public class MediaPickerActivity extends ActionBarActivity
 
         public void addTab(ArrayList<MediaSource> mediaSources, String tabName, String loading, String error, String empty) {
             mMediaPickers.add(new MediaPicker(tabName, loading, error, empty, mediaSources));
+        }
+
+        private class MediaPicker {
+            public String loadingText;
+            public String errorText;
+            public String emptyText;
+            public String pickerTitle;
+            public ArrayList<MediaSource> mediaSources;
+
+            public MediaPicker(String name, String loading, String error, String empty, ArrayList<MediaSource> sources) {
+                loadingText = loading;
+                errorText = error;
+                emptyText = empty;
+                pickerTitle = name;
+                mediaSources = sources;
+            }
         }
     }
 }

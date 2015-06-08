@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <include
-        layout="@layout/toolbar"
-        android:id="@+id/toolbar" />
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
-    <org.wordpress.android.widgets.SlidingTabLayout
-        android:id="@+id/sliding_tabs"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/tab_background" />
