@@ -6,9 +6,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -62,24 +62,21 @@ public class ReaderSubsActivity extends ActionBarActivity
                                 implements ReaderTagAdapter.TagActionListener,
                                            ActionBar.TabListener {
 
-    private EditText mEditAdd;
-    private ImageButton mBtnAdd;
-    private ViewPager mViewPager;
-    private SubsPageAdapter mPageAdapter;
-
-    private boolean mTagsChanged;
-    private boolean mBlogsChanged;
-    private String mLastAddedTagName;
-    private boolean mHasPerformedUpdate;
-
     static final String KEY_TAGS_CHANGED        = "tags_changed";
     static final String KEY_BLOGS_CHANGED       = "blogs_changed";
     static final String KEY_LAST_ADDED_TAG_NAME = "last_added_tag_name";
-
     private static final int TAB_IDX_FOLLOWED_TAGS = 0;
     private static final int TAB_IDX_SUGGESTED_TAGS = 1;
     private static final int TAB_IDX_FOLLOWED_BLOGS = 2;
     private static final int TAB_IDX_RECOMMENDED_BLOGS = 3;
+    private EditText mEditAdd;
+    private ImageButton mBtnAdd;
+    private ViewPager mViewPager;
+    private SubsPageAdapter mPageAdapter;
+    private boolean mTagsChanged;
+    private boolean mBlogsChanged;
+    private String mLastAddedTagName;
+    private boolean mHasPerformedUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +88,13 @@ public class ReaderSubsActivity extends ActionBarActivity
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setAdapter(getPageAdapter());
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        int normalColor = getResources().getColor(R.color.blue_light);
+        int selectedColor = getResources().getColor(R.color.white);
+        tabLayout.setTabTextColors(normalColor, selectedColor);
+        tabLayout.setupWithViewPager(mViewPager);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -101,10 +105,6 @@ public class ReaderSubsActivity extends ActionBarActivity
         });
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        PagerTabStrip tabStrip = (PagerTabStrip) findViewById(R.id.pager_tabs);
-        tabStrip.setTabIndicatorColorResource(R.color.tab_indicator);
-        tabStrip.setTextColor(getResources().getColor(R.color.tab_text_selected));
 
         mEditAdd = (EditText) findViewById(R.id.edit_add);
         mEditAdd.setOnEditorActionListener(new TextView.OnEditorActionListener() {
