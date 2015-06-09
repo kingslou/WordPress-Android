@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +14,8 @@
         android:background="@color/tab_background"
         android:elevation="@dimen/tabs_elevation"
         android:paddingLeft="@dimen/tabstrip_padding"
-        android:paddingRight="@dimen/tabstrip_padding" />
+        android:paddingRight="@dimen/tabstrip_padding"
+        app:tabIndicatorColor="@color/tab_indicator" />
 
     <org.wordpress.android.widgets.WPMainViewPager
         android:id="@+id/viewpager_main"

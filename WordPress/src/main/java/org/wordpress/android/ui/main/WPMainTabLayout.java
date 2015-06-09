@@ -11,7 +11,6 @@ import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
@@ -49,22 +48,18 @@ public class WPMainTabLayout extends TabLayout {
         addTab(R.drawable.main_tab_me, R.string.tabbar_accessibility_label_me);
         addTab(R.drawable.main_tab_notifications, R.string.notifications);
         checkNoteBadge();
-        // TODO: mTabLayout.setSelectedIndicatorColor(getResources().getColor(R.color.tab_indicator));
     }
 
     private void addTab(@DrawableRes int iconId, @StringRes int contentDescriptionId) {
-        View customView = LayoutInflater.from(getContext()).inflate(R.layout.tab_icon, (ViewGroup) null);
+        View customView = LayoutInflater.from(getContext()).inflate(R.layout.tab_icon, null);
 
         ImageView icon = (ImageView) customView.findViewById(R.id.tab_icon);
         icon.setImageResource(iconId);
-        icon.setContentDescription(getContext().getString(contentDescriptionId));
 
         View badge = customView.findViewById(R.id.tab_badge);
-        badge.setTag(makeBadgeTag(this.getTabCount()));
+        badge.setTag(makeBadgeTag(getTabCount()));
 
-        TabLayout.Tab tab = newTab();
-        tab.setCustomView(customView);
-        addTab(tab);
+        addTab(newTab().setCustomView(customView).setContentDescription(contentDescriptionId));
     }
 
     void checkNoteBadge() {
@@ -76,7 +71,7 @@ public class WPMainTabLayout extends TabLayout {
     }
 
     /*
-     * adds or removes a badge for the tab at the passed index - only enabled when showing icons
+     * adds or removes a badge for the tab at the passed index
      */
     public void setBadge(int position, boolean isBadged) {
         final View badgeView = findViewWithTag(makeBadgeTag(position));
@@ -118,8 +113,8 @@ public class WPMainTabLayout extends TabLayout {
         animScale.start();
     }
 
-    public boolean isBadged(int position) {
-        final View badgeView = findViewWithTag(makeBadgeTag(position));
+    private boolean isBadged(int position) {
+        View badgeView = findViewWithTag(makeBadgeTag(position));
         return badgeView != null && badgeView.getVisibility() == View.VISIBLE;
     }
 }
