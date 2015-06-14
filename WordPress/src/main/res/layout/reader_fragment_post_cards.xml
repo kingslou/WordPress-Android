@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -11,68 +11,91 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
-    <org.wordpress.android.util.widgets.CustomSwipeRefreshLayout
-        android:id="@+id/ptr_layout"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/frame_header">
 
-        <org.wordpress.android.ui.reader.views.ReaderRecyclerView
-            android:id="@+id/recycler_view"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_reader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/content_margin"
+            android:layout_marginRight="@dimen/content_margin"
+            android:background="@color/transparent"
+            android:visibility="visible"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            tools:visibility="visible">
+
+            <Spinner
+                android:id="@+id/reader_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:spinnerMode="dropdown"
+                tools:listitem="@layout/reader_toolbar_spinner_item" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <org.wordpress.android.util.widgets.CustomSwipeRefreshLayout
+            android:id="@+id/ptr_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </org.wordpress.android.util.widgets.CustomSwipeRefreshLayout>
+            <org.wordpress.android.ui.reader.views.ReaderRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
 
-    <include
-        android:id="@+id/toolbar_reader"
-        layout="@layout/reader_toolbar" />
+        </org.wordpress.android.util.widgets.CustomSwipeRefreshLayout>
 
-    <include
-        android:id="@+id/empty_view"
-        layout="@layout/reader_empty_view" />
+        <include
+            android:id="@+id/empty_view"
+            layout="@layout/reader_empty_view" />
 
-    <LinearLayout
-        android:id="@+id/layout_new_posts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/reader_new_posts_bar_background"
-        android:elevation="@dimen/message_bar_elevation"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/margin_large"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="@dimen/margin_large"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <org.wordpress.android.widgets.WPTextView
+        <LinearLayout
+            android:id="@+id/layout_new_posts"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reader_label_new_posts"
-            android:textColor="@color/grey_lighten_30"
-            android:textSize="@dimen/text_sz_large" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/reader_new_posts_bar_background"
+            android:elevation="@dimen/message_bar_elevation"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/margin_large"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:paddingTop="@dimen/margin_large"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-        <org.wordpress.android.widgets.WPTextView
+            <org.wordpress.android.widgets.WPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reader_label_new_posts"
+                android:textColor="@color/grey_lighten_30"
+                android:textSize="@dimen/text_sz_large" />
+
+            <org.wordpress.android.widgets.WPTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reader_label_new_posts_subtitle"
+                android:textColor="@color/grey_lighten_30"
+                android:textSize="@dimen/text_sz_small" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_footer"
+            style="@style/ReaderProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reader_label_new_posts_subtitle"
-            android:textColor="@color/grey_lighten_30"
-            android:textSize="@dimen/text_sz_small" />
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progress_footer"
-        style="@style/ReaderProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/margin_large"
-        android:visibility="gone"
-        tools:visibility="visible" />
-
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

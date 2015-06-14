@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
@@ -32,7 +31,6 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.wordpress.android.Constants;
 import org.wordpress.android.R;
 import org.wordpress.android.analytics.AnalyticsTracker;
 import org.wordpress.android.datasets.ReaderBlogTable;
@@ -109,7 +107,6 @@ public class ReaderPostListFragment extends Fragment
     private ReaderPostListType mPostListType;
 
     private int mRestorePosition;
-    private int mTagToolbarOffset;
 
     private boolean mIsUpdating;
     private boolean mWasPaused;
@@ -359,7 +356,7 @@ public class ReaderPostListFragment extends Fragment
         mNewPostsBar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                scrollRecycleViewToPosition(0);
+                mRecyclerView.scrollToPosition(0);
                 refreshPosts();
             }
         });
@@ -466,45 +463,6 @@ public class ReaderPostListFragment extends Fragment
         });
     }
 
-    private void scrollRecycleViewToPosition(int position) {
-        if (!isAdded() || mRecyclerView == null) return;
-
-        mRecyclerView.scrollToPosition(position);
-
-        // we need to reposition the tag toolbar here, but we need to wait for the
-        // recycler to settle before doing so - note that RecyclerView doesn't
-        // fire it's scroll listener when scrollToPosition() is called, so we
-        // can't rely on that to position the toolbar in this situation
-        if (shouldShowTagToolbar()) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    positionTagToolbar();
-                }
-            }, 250);
-        }
-    }
-
-    /*
-     * position the tag toolbar based on the recycler's scroll position - this will make it
-     * appear to scroll along with the recycler
-     */
-    private void positionTagToolbar() {
-        if (!isAdded() || mTagToolbar == null) return;
-
-        int distance = mRecyclerView.getVerticalScrollOffset();
-        int newVisibility;
-        if (distance <= mTagToolbarOffset) {
-            newVisibility = View.VISIBLE;
-            mTagToolbar.setTranslationY(-distance);
-        } else {
-            newVisibility = View.GONE;
-        }
-        if (mTagToolbar.getVisibility() != newVisibility) {
-            mTagToolbar.setVisibility(newVisibility);
-        }
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -532,17 +490,6 @@ public class ReaderPostListFragment extends Fragment
                     }
                 });
             }
-
-            // scroll the tag toolbar with the recycler
-            int toolbarHeight = getResources().getDimensionPixelSize(R.dimen.toolbar_height);
-            mTagToolbarOffset = (int) (toolbarHeight + (toolbarHeight * 0.25));
-            mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    positionTagToolbar();
-                }
-            });
 
             // create the tag spinner in the toolbar
             if (mTagSpinner == null) {
@@ -686,16 +633,6 @@ public class ReaderPostListFragment extends Fragment
         Snackbar.make(getView(), getString(R.string.reader_toast_blog_blocked), Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, undoListener)
                 .show();
-
-        // make sure the tag toolbar is correctly positioned once the snackbar goes away
-        if (shouldShowTagToolbar()) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    positionTagToolbar();
-                }
-            }, Constants.SNACKBAR_LONG_DURATION_MS);
-        }
     }
 
     /*
@@ -820,7 +757,7 @@ public class ReaderPostListFragment extends Fragment
                 mEmptyView.setVisibility(View.GONE);
                 if (mRestorePosition > 0) {
                     AppLog.d(T.READER, "reader post list > restoring position");
-                    scrollRecycleViewToPosition(mRestorePosition);
+                    mRecyclerView.scrollToPosition(mRestorePosition);
                 }
             }
             mRestorePosition = 0;
