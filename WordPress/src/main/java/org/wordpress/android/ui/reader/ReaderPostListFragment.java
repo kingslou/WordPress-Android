@@ -415,6 +415,10 @@ public class ReaderPostListFragment extends Fragment
                 }
         );
 
+        // hide the appbar which contains the tag toolbar if it's not needed
+        View appBar = rootView.findViewById(R.id.appbar);
+        appBar.setVisibility(shouldShowTagToolbar() ? View.VISIBLE : View.GONE);
+
         return rootView;
     }
 
@@ -470,11 +474,6 @@ public class ReaderPostListFragment extends Fragment
         // configure the toolbar for posts in followed tags (shown in main viewpager activity)
         if (shouldShowTagToolbar()) {
             mTagToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_reader);
-
-            // the toolbar is hidden by the layout, so we need to show it here unless we know we're
-            // going to restore the list position once the adapter is loaded (which will take care
-            // of showing/hiding the toolbar)
-            mTagToolbar.setVisibility(mRestorePosition > 0 ? View.GONE : View.VISIBLE);
 
             // enable customizing followed tags/blogs if user is logged in
             if (!mIsLoggedOutReader) {

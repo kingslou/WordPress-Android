@@ -19,7 +19,8 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/grey_light">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_reader"
@@ -27,8 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/content_margin"
                 android:layout_marginRight="@dimen/content_margin"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <Spinner
                     android:id="@+id/reader_spinner"
