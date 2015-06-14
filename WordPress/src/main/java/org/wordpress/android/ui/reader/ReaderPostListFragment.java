@@ -825,8 +825,6 @@ public class ReaderPostListFragment extends Fragment
             mPostAdapter.setOnDataLoadedListener(mDataLoadedListener);
             mPostAdapter.setOnDataRequestedListener(mDataRequestedListener);
             mPostAdapter.setOnReblogRequestedListener(mRequestReblogListener);
-            // show spacer above the first post to accommodate toolbar
-            mPostAdapter.setShowToolbarSpacer(shouldShowTagToolbar());
         }
         return mPostAdapter;
     }

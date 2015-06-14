@@ -46,7 +46,6 @@ public class ReaderPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private final int mMarginLarge;
 
     private boolean mCanRequestMorePosts;
-    private boolean mShowToolbarSpacer;
     private final boolean mIsLoggedOutReader;
 
     private final ReaderTypes.ReaderPostListType mPostListType;
@@ -83,7 +82,6 @@ public class ReaderPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         private final WPNetworkImageView imgAvatar;
 
         private final ViewGroup layoutPostHeader;
-        private final View toolbarSpacer;
 
         public ReaderPostViewHolder(View itemView) {
             super(itemView);
@@ -105,7 +103,6 @@ public class ReaderPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             imgMore = (ImageView) itemView.findViewById(R.id.image_more);
 
             layoutPostHeader = (ViewGroup) itemView.findViewById(R.id.layout_post_header);
-            toolbarSpacer = itemView.findViewById(R.id.spacer_toolbar);
 
             imgBtnReblog = (ImageView) itemView.findViewById(R.id.image_reblog_btn);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -128,8 +125,6 @@ public class ReaderPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         postHolder.txtTitle.setText(post.getTitle());
         postHolder.txtDate.setText(DateTimeUtils.javaDateToTimeSpan(post.getDatePublished()));
-
-        postHolder.toolbarSpacer.setVisibility(position == 0 && mShowToolbarSpacer ? View.VISIBLE : View.GONE);
 
         // hide the post header (avatar, blog name & follow button) if we're showing posts
         // in a specific blog
@@ -326,13 +321,6 @@ public class ReaderPostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         mPhotonHeight = context.getResources().getDimensionPixelSize(R.dimen.reader_featured_image_height);
 
         setHasStableIds(true);
-    }
-
-    /*
-     * show spacer view above the first post to accommodate tag toolbar on ReaderPostListFragment
-     */
-    public void setShowToolbarSpacer(boolean show) {
-        mShowToolbarSpacer = show;
     }
 
     public void setOnPostSelectedListener(ReaderInterfaces.OnPostSelectedListener listener) {

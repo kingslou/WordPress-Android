@@ -16,27 +16,30 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/frame_header">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_reader"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/content_margin"
-            android:layout_marginRight="@dimen/content_margin"
-            android:background="@color/transparent"
-            android:visibility="visible"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            tools:visibility="visible">
+            android:layout_height="wrap_content">
 
-            <Spinner
-                android:id="@+id/reader_spinner"
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_reader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:spinnerMode="dropdown"
-                tools:listitem="@layout/reader_toolbar_spinner_item" />
+                android:layout_marginLeft="@dimen/content_margin"
+                android:layout_marginRight="@dimen/content_margin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-        </android.support.v7.widget.Toolbar>
+                <Spinner
+                    android:id="@+id/reader_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:spinnerMode="dropdown"
+                    tools:listitem="@layout/reader_toolbar_spinner_item" />
+
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
 
         <org.wordpress.android.util.widgets.CustomSwipeRefreshLayout
             android:id="@+id/ptr_layout"
@@ -52,50 +55,51 @@
 
         </org.wordpress.android.util.widgets.CustomSwipeRefreshLayout>
 
-        <include
-            android:id="@+id/empty_view"
-            layout="@layout/reader_empty_view" />
-
-        <LinearLayout
-            android:id="@+id/layout_new_posts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/reader_new_posts_bar_background"
-            android:elevation="@dimen/message_bar_elevation"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/margin_large"
-            android:paddingLeft="24dp"
-            android:paddingRight="24dp"
-            android:paddingTop="@dimen/margin_large"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <org.wordpress.android.widgets.WPTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reader_label_new_posts"
-                android:textColor="@color/grey_lighten_30"
-                android:textSize="@dimen/text_sz_large" />
-
-            <org.wordpress.android.widgets.WPTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/reader_label_new_posts_subtitle"
-                android:textColor="@color/grey_lighten_30"
-                android:textSize="@dimen/text_sz_small" />
-        </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/progress_footer"
-            style="@style/ReaderProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/margin_large"
-            android:visibility="gone"
-            tools:visibility="visible" />
     </android.support.design.widget.CoordinatorLayout>
+
+    <include
+        android:id="@+id/empty_view"
+        layout="@layout/reader_empty_view" />
+
+    <LinearLayout
+        android:id="@+id/layout_new_posts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/reader_new_posts_bar_background"
+        android:elevation="@dimen/message_bar_elevation"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/margin_large"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="@dimen/margin_large"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <org.wordpress.android.widgets.WPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reader_label_new_posts"
+            android:textColor="@color/grey_lighten_30"
+            android:textSize="@dimen/text_sz_large" />
+
+        <org.wordpress.android.widgets.WPTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reader_label_new_posts_subtitle"
+            android:textColor="@color/grey_lighten_30"
+            android:textSize="@dimen/text_sz_small" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_footer"
+        style="@style/ReaderProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </RelativeLayout>
