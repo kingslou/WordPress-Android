@@ -1439,7 +1439,7 @@ public class ReaderPostListFragment extends Fragment
     @Override
     public void onScrollToTop() {
         if (isAdded() && getCurrentPosition() > 0) {
-            mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, 0);
+            mRecyclerView.smoothScrollToPosition(0);
         }
     }
 }
