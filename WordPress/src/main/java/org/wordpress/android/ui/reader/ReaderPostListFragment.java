@@ -91,7 +91,6 @@ public class ReaderPostListFragment extends Fragment
     private ReaderRecyclerView mRecyclerView;
 
     private SwipeToRefreshHelper mSwipeToRefreshHelper;
-    private CustomSwipeRefreshLayout mSwipeToRefreshLayout;
 
     private View mNewPostsBar;
     private View mEmptyView;
@@ -387,9 +386,9 @@ public class ReaderPostListFragment extends Fragment
         mProgress.setVisibility(View.GONE);
 
         // swipe to refresh setup
-        mSwipeToRefreshLayout = (CustomSwipeRefreshLayout) rootView.findViewById(R.id.ptr_layout);
+        CustomSwipeRefreshLayout swipeToRefreshLayout = (CustomSwipeRefreshLayout) rootView.findViewById(R.id.ptr_layout);
         mSwipeToRefreshHelper = new SwipeToRefreshHelper(getActivity(),
-                mSwipeToRefreshLayout,
+                swipeToRefreshLayout,
                 new RefreshListener() {
                     @Override
                     public void onRefreshStarted() {
