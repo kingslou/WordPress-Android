@@ -83,7 +83,6 @@ public class ReaderPostListFragment extends Fragment
                    ReaderInterfaces.OnPostPopupListener,
                    WPMainActivity.OnScrollToTopListener {
 
-    private Toolbar mTagToolbar;
     private Spinner mTagSpinner;
     private ReaderTagSpinnerAdapter mSpinnerAdapter;
 
@@ -472,12 +471,12 @@ public class ReaderPostListFragment extends Fragment
 
         // configure the toolbar for posts in followed tags (shown in main viewpager activity)
         if (shouldShowTagToolbar()) {
-            mTagToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_reader);
+            Toolbar tagToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_reader);
 
             // enable customizing followed tags/blogs if user is logged in
             if (!mIsLoggedOutReader) {
-                mTagToolbar.inflateMenu(R.menu.reader_list);
-                mTagToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                tagToolbar.inflateMenu(R.menu.reader_list);
+                tagToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         if (menuItem.getItemId() == R.id.menu_tags) {
@@ -491,7 +490,7 @@ public class ReaderPostListFragment extends Fragment
 
             // create the tag spinner in the toolbar
             if (mTagSpinner == null) {
-                enableTagSpinner();
+                enableTagSpinner(tagToolbar);
             }
             selectTagInSpinner(getCurrentTag());
         }
@@ -636,10 +635,10 @@ public class ReaderPostListFragment extends Fragment
     /*
      * enables the tag spinner in the toolbar, used only for posts in followed tags
      */
-    private void enableTagSpinner() {
+    private void enableTagSpinner(Toolbar toolbar) {
         if (!isAdded()) return;
 
-        mTagSpinner = (Spinner) mTagToolbar.findViewById(R.id.reader_spinner);
+        mTagSpinner = (Spinner) toolbar.findViewById(R.id.reader_spinner);
         mTagSpinner.setAdapter(getSpinnerAdapter());
         mTagSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
