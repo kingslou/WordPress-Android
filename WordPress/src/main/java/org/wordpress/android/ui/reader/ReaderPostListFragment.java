@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -359,7 +360,7 @@ public class ReaderPostListFragment extends Fragment
             }
         });
 
-        // add the tag/blog header - note that this remains invisible until animated in
+        // add the header for tag/blog preview - note that this remains invisible until animated in
         ViewGroup header = (ViewGroup) rootView.findViewById(R.id.frame_header);
         switch (getPostListType()) {
             case TAG_PREVIEW:
@@ -373,6 +374,38 @@ public class ReaderPostListFragment extends Fragment
                 header.addView(mBlogInfoView);
                 header.setVisibility(View.INVISIBLE);
                 break;
+        }
+
+
+        Toolbar tagToolbar = (Toolbar) rootView.findViewById(R.id.toolbar_reader);
+        if (shouldShowTagToolbar()) {
+            // remove background & elevation - toolbar needs to have same background as the list
+            AppBarLayout appbar = (AppBarLayout) rootView.findViewById(R.id.appbar);
+            appbar.setBackgroundColor(context.getResources().getColor(R.color.transparent));
+            appbar.setElevation(0f);
+
+            // enable customizing followed tags/blogs if user is logged in
+            if (!mIsLoggedOutReader) {
+                tagToolbar.inflateMenu(R.menu.reader_list);
+                tagToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        if (menuItem.getItemId() == R.id.menu_tags) {
+                            ReaderActivityLauncher.showReaderSubsForResult(getActivity());
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+            }
+
+            // create the tag spinner in the toolbar
+            if (mTagSpinner == null) {
+                enableTagSpinner(tagToolbar);
+            }
+            selectTagInSpinner(getCurrentTag());
+        } else {
+            tagToolbar.setVisibility(View.GONE);
         }
 
         // view that appears when current tag/blog has no posts - box images in this view are
@@ -412,10 +445,6 @@ public class ReaderPostListFragment extends Fragment
                     }
                 }
         );
-
-        // hide the appbar which contains the tag toolbar if it's not needed
-        View appBar = rootView.findViewById(R.id.appbar);
-        appBar.setVisibility(shouldShowTagToolbar() ? View.VISIBLE : View.GONE);
 
         return rootView;
     }
@@ -468,32 +497,6 @@ public class ReaderPostListFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        // configure the toolbar for posts in followed tags (shown in main viewpager activity)
-        if (shouldShowTagToolbar()) {
-            Toolbar tagToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_reader);
-
-            // enable customizing followed tags/blogs if user is logged in
-            if (!mIsLoggedOutReader) {
-                tagToolbar.inflateMenu(R.menu.reader_list);
-                tagToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        if (menuItem.getItemId() == R.id.menu_tags) {
-                            ReaderActivityLauncher.showReaderSubsForResult(getActivity());
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-            }
-
-            // create the tag spinner in the toolbar
-            if (mTagSpinner == null) {
-                enableTagSpinner(tagToolbar);
-            }
-            selectTagInSpinner(getCurrentTag());
-        }
 
         boolean adapterAlreadyExists = hasPostAdapter();
         mRecyclerView.setAdapter(getPostAdapter());

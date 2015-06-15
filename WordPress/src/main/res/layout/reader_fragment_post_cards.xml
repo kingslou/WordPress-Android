@@ -5,17 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/frame_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinator"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/frame_header">
+        android:layout_height="match_parent">
 
         <org.wordpress.android.util.widgets.CustomSwipeRefreshLayout
             android:id="@+id/ptr_layout"
@@ -34,9 +26,14 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            app:elevation="0dp">
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/frame_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_scrollFlags="scroll|enterAlways" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_reader"
@@ -44,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/content_margin"
                 android:layout_marginRight="@dimen/content_margin"
-                app:layout_scrollFlags="scroll">
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <Spinner
                     android:id="@+id/reader_spinner"
