@@ -1,14 +1,10 @@
 package org.wordpress.android.ui.reader;
 
-import android.animation.Animator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,10 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -360,25 +353,9 @@ public class ReaderPostListFragment extends Fragment
             }
         });
 
-        // add the header for tag/blog preview - note that this remains invisible until animated in
-        ViewGroup header = (ViewGroup) rootView.findViewById(R.id.frame_header);
-        switch (getPostListType()) {
-            case TAG_PREVIEW:
-                mTagInfoView = (ViewGroup) inflater.inflate(R.layout.reader_tag_info_view, container, false);
-                header.addView(mTagInfoView);
-                header.setVisibility(View.INVISIBLE);
-                break;
-
-            case BLOG_PREVIEW:
-                mBlogInfoView = new ReaderBlogInfoView(context);
-                header.addView(mBlogInfoView);
-                header.setVisibility(View.INVISIBLE);
-                break;
-        }
-
-
+        boolean shouldShowTagToolbar = (getPostListType() == ReaderPostListType.TAG_FOLLOWED);
         Toolbar tagToolbar = (Toolbar) rootView.findViewById(R.id.toolbar_reader);
-        if (shouldShowTagToolbar()) {
+        if (shouldShowTagToolbar) {
             // remove background & elevation - toolbar needs to have same background as the list
             AppBarLayout appbar = (AppBarLayout) rootView.findViewById(R.id.appbar);
             appbar.setBackgroundColor(context.getResources().getColor(R.color.transparent));
@@ -406,6 +383,22 @@ public class ReaderPostListFragment extends Fragment
             selectTagInSpinner(getCurrentTag());
         } else {
             tagToolbar.setVisibility(View.GONE);
+
+            // add the header for tag/blog preview
+            ViewGroup header = (ViewGroup) rootView.findViewById(R.id.frame_header);
+            switch (getPostListType()) {
+                case TAG_PREVIEW:
+                    mTagInfoView = (ViewGroup) inflater.inflate(R.layout.reader_tag_info_view, container, false);
+                    header.addView(mTagInfoView);
+                    header.setVisibility(View.VISIBLE);
+                    break;
+
+                case BLOG_PREVIEW:
+                    mBlogInfoView = new ReaderBlogInfoView(context);
+                    header.addView(mBlogInfoView);
+                    header.setVisibility(View.VISIBLE);
+                    break;
+            }
         }
 
         // view that appears when current tag/blog has no posts - box images in this view are
@@ -449,51 +442,6 @@ public class ReaderPostListFragment extends Fragment
         return rootView;
     }
 
-    /*
-     * animate in the blog/tag info header after a brief delay
-     */
-    @SuppressLint("NewApi")
-    private void animateHeaderDelayed() {
-        if (!isAdded()) {
-            return;
-        }
-
-        final ViewGroup header = (ViewGroup) getView().findViewById(R.id.frame_header);
-        if (header == null || header.getVisibility() == View.VISIBLE) {
-            return;
-        }
-
-        // must wait for header to be fully laid out (ie: measured) or else we risk
-        // "IllegalStateException: Cannot start this animator on a detached view"
-        header.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                header.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isAdded()) {
-                            return;
-                        }
-                        header.setVisibility(View.VISIBLE);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Animator animator = ViewAnimationUtils.createCircularReveal(
-                                    header,
-                                    header.getWidth() / 2,
-                                    0,
-                                    0,
-                                    (float) Math.hypot(header.getWidth(), header.getHeight()));
-                            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                            animator.start();
-                        } else {
-                            AniUtils.startAnimation(header, R.anim.reader_top_bar_in);
-                        }
-                    }
-                }, 250);
-            }
-        });
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -519,11 +467,9 @@ public class ReaderPostListFragment extends Fragment
         switch (getPostListType()) {
             case BLOG_PREVIEW:
                 loadBlogOrFeedInfo();
-                animateHeaderDelayed();
                 break;
             case TAG_PREVIEW:
                 updateTagPreviewHeader();
-                animateHeaderDelayed();
                 break;
         }
     }
@@ -667,14 +613,6 @@ public class ReaderPostListFragment extends Fragment
                 // nop
             }
         });
-    }
-
-    /*
-     * returns true if the fragment should have it's own toolbar - used when showing posts in
-     * followed tags so user can select a different tag from the toolbar spinner
-     */
-    private boolean shouldShowTagToolbar() {
-        return (getPostListType() == ReaderPostListType.TAG_FOLLOWED);
     }
 
     /*
