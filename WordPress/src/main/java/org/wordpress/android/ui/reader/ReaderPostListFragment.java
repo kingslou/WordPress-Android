@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -1380,6 +1381,14 @@ public class ReaderPostListFragment extends Fragment
     @Override
     public void onScrollToTop() {
         if (isAdded() && getCurrentPosition() > 0) {
+            // CoordinatorLayout won't re-show the AppBar when we programmatically scroll, so
+            // force the AppBar to show the toolbar before scrolling
+            AppBarLayout appbar = (AppBarLayout) getView().findViewById(R.id.appbar);
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appbar.getLayoutParams();
+            AppBarLayout.Behavior behavior = (AppBarLayout.Behavior) params.getBehavior();
+            if (behavior != null) {
+                behavior.setTopAndBottomOffset(0);
+            }
             mRecyclerView.smoothScrollToPosition(0);
         }
     }
