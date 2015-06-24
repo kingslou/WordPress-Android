@@ -30,6 +30,7 @@ import org.wordpress.android.ui.stats.StatsActivity;
 import org.wordpress.android.ui.stats.StatsSingleItemDetailsActivity;
 import org.wordpress.android.ui.stats.models.PostModel;
 import org.wordpress.android.ui.themes.ThemeBrowserActivity;
+import org.wordpress.android.ui.themes.ThemeBrowserActivity2;
 import org.wordpress.android.util.AppLog;
 import org.wordpress.android.util.HelpshiftHelper;
 import org.wordpress.android.util.HelpshiftHelper.Tag;
@@ -86,7 +87,7 @@ public class ActivityLauncher {
     }
 
     public static void viewCurrentBlogThemes(Context context) {
-        if (ThemeBrowserActivity.isAccessible()) {
+        if (ThemeBrowserActivity2.isAccessible()) {
             Intent intent = new Intent(context, ThemeBrowserActivity.class);
             slideInFromRight(context, intent);
         }

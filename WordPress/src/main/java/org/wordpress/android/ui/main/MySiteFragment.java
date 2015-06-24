@@ -22,7 +22,7 @@ import org.wordpress.android.ui.ActivityLauncher;
 import org.wordpress.android.ui.RequestCodes;
 import org.wordpress.android.ui.posts.EditPostActivity;
 import org.wordpress.android.ui.stats.service.StatsService;
-import org.wordpress.android.ui.themes.ThemeBrowserActivity;
+import org.wordpress.android.ui.themes.ThemeBrowserActivity2;
 import org.wordpress.android.util.AniUtils;
 import org.wordpress.android.util.CoreEvents;
 import org.wordpress.android.util.GravatarUtils;
@@ -241,7 +241,7 @@ public class MySiteFragment extends Fragment
             return;
         }
 
-        int themesVisibility = ThemeBrowserActivity.isAccessible() ? View.VISIBLE : View.GONE;
+        int themesVisibility = ThemeBrowserActivity2.isAccessible() ? View.VISIBLE : View.GONE;
         mLookAndFeelHeader.setVisibility(themesVisibility);
         mThemesContainer.setVisibility(themesVisibility);
 

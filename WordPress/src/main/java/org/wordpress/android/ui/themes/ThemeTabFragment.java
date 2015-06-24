@@ -115,8 +115,8 @@ public class ThemeTabFragment extends Fragment implements OnItemClickListener, R
                         mEmptyView.setText(R.string.no_network_title);
                         return;
                     }
-                    if (getActivity() instanceof ThemeBrowserActivity) {
-                        ((ThemeBrowserActivity) getActivity()).fetchThemes(getArguments().getInt(ARGS_PAGE));
+                    if (getActivity() instanceof ThemeBrowserActivity2) {
+                        ((ThemeBrowserActivity2) getActivity()).fetchThemes(getArguments().getInt(ARGS_PAGE));
                     }
                 }
             });

@@ -22,7 +22,7 @@ import org.wordpress.android.util.DisplayUtils;
  * Adapter for the {@link ThemeTabFragment}'s gridview
  *
  */
-public class ThemeTabAdapter extends CursorAdapter {
+public class  ThemeTabAdapter extends CursorAdapter {
     private final LayoutInflater mInflater;
     private final int mColumnWidth;
     private final int mColumnHeight;
