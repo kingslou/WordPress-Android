@@ -180,11 +180,11 @@ public class ThemeTabFragment extends Fragment implements OnItemClickListener, R
 
     private ThemeSortType getThemeSortType() {
         int sortType = ThemeSortType.TRENDING.ordinal();
-        if (getArguments().containsKey(ARGS_SORT))  {
+        if (getArguments() != null && getArguments().containsKey(ARGS_SORT))  {
             sortType = getArguments().getInt(ARGS_SORT);
         }
 
-        return ThemeSortType.getTheme(sortType);
+        return ThemeSortType.NEWEST;
     }
 
     /**

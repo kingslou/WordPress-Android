@@ -4,10 +4,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.wordpress.android.R;
 
-public class ThemeBrowserActivity extends ActionBarActivity {
+public class ThemeBrowserActivity extends ActionBarActivity implements ThemeTabFragment.ThemeTabFragmentCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +37,10 @@ public class ThemeBrowserActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onThemeSelected(String themeId) {
+        Toast.makeText(this, "hey", Toast.LENGTH_LONG);
     }
 }
