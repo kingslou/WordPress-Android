@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import org.wordpress.android.R;
 
-public class ThemeBrowserActivity extends ActionBarActivity implements ThemeFragment.OnFragmentInteractionListener {
+public class ThemeBrowserActivity extends ActionBarActivity implements ThemeFragment.ThemeFragmentCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +39,9 @@ public class ThemeBrowserActivity extends ActionBarActivity implements ThemeFrag
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
-    public void onFragmentInteraction(String id) {
+    public void onThemeSelected(String themeId) {
 
     }
 }
