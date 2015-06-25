@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import org.wordpress.android.R;
 
-public class ThemeBrowserActivity extends ActionBarActivity implements ThemeTabFragment.ThemeTabFragmentCallback {
+public class ThemeBrowserActivity extends ActionBarActivity implements ThemeFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class ThemeBrowserActivity extends ActionBarActivity implements ThemeTabF
     }
 
     @Override
-    public void onThemeSelected(String themeId) {
-        Toast.makeText(this, "hey", Toast.LENGTH_LONG);
+    public void onFragmentInteraction(String id) {
+
     }
 }
