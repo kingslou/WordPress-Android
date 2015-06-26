@@ -208,7 +208,7 @@ public class ThemeTabFragment extends Fragment implements OnItemClickListener, R
         }
     }
 
-    private void refreshView() {
+    public void refreshView() {
         Cursor cursor = fetchThemes(getThemeSortType());
         if (cursor == null) {
             return;

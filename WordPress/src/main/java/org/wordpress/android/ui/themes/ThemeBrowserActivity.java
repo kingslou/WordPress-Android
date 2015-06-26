@@ -1,10 +1,9 @@
 package org.wordpress.android.ui.themes;
 
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -32,6 +31,7 @@ public class ThemeBrowserActivity extends ActionBarActivity implements ThemeFrag
     private boolean mFetchingThemes = false;
     private boolean mIsRunning;
 
+    private ThemeFragment mFragment;
     private boolean mIsActivatingTheme = false;
     private static final String KEY_IS_ACTIVATING_THEME = "is_activating_theme";
 
@@ -50,6 +50,8 @@ public class ThemeBrowserActivity extends ActionBarActivity implements ThemeFrag
         }
 
         setContentView(R.layout.activity_theme_browser);
+
+        mFragment = (ThemeFragment) getFragmentManager().findFragmentById(R.id.fragment);
     }
 
     @Override
@@ -216,6 +218,8 @@ public class ThemeBrowserActivity extends ActionBarActivity implements ThemeFrag
                     if (result == null) {
                         Toast.makeText(ThemeBrowserActivity.this, R.string.theme_fetch_failed, Toast.LENGTH_SHORT)
                                 .show();
+                    } else {
+                        mFragment.refreshView();
                     }
                 }
             });

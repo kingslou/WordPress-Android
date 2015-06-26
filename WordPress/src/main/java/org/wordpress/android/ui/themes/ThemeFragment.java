@@ -199,4 +199,19 @@ public class ThemeFragment extends Fragment implements AdapterView.OnItemClickLi
             }
         }
     }
+
+    public void refreshView() {
+        Cursor cursor = fetchThemes(getThemeSortType());
+        if (cursor == null) {
+            return;
+        }
+        if (mAdapter == null) {
+            mAdapter = new ThemeTabAdapter(getActivity(), cursor, false);
+        }
+        if (mNoResultText.isShown()) {
+            mNoResultText.setVisibility(View.GONE);
+        }
+        mAdapter.changeCursor(cursor);
+        setEmptyViewVisible(mAdapter.getCount() == 0);
+    }
 }
