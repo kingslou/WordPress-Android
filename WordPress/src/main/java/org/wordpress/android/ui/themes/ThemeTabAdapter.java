@@ -60,9 +60,9 @@ public class  ThemeTabAdapter extends CursorAdapter {
         view.setTag(themeViewHolder);
 
         // size the imageView to fit the column - image will be requested at this same width
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) themeViewHolder.imageView.getLayoutParams();
-        params.width = mColumnWidth;
-        params.height = mColumnHeight;
+//        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) themeViewHolder.imageView.getLayoutParams();
+//        params.width = mColumnWidth;
+//        params.height = mColumnHeight;
 
         return view;
     }
@@ -101,7 +101,7 @@ public class  ThemeTabAdapter extends CursorAdapter {
         }
 
         themeViewHolder.imageView.setImageUrl(screenshotURL + "?w=" + mColumnWidth, WordPress.imageLoader);
-        view.setLayoutParams(new GridView.LayoutParams(mColumnWidth, mColumnHeight + m32DpToPx));
+        view.setLayoutParams(new GridView.LayoutParams(600, 500 + m32DpToPx));
     }
 
     // The theme previews are 600x450 px, resulting in a ratio of 0.75
